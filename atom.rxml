@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id><%= feed_id %></id>
+  <title><%= feed_title %></title>
+  <updated><%= feed_updated %></updated>
+  <link href="<%= feed_link %>" rel="self"/>
+
+  <author>
+    <name><%= feed_author %></name>
+  </author>
+
+<% for entry in feed_entries %>
+<entry>
+  <title><%= entry[:title]%></title>
+  <id><%= entry[:permalink]%></id>
+  <updated><%= entry[:updated]%></updated>
+  <link href="<%= entry[:permalink]%>"/>
+
+  <content type="html">
+    <![CDATA[ <%= entry[:body]%>]]>
+  </content>
+</entry>
+<% end %>
+</feed>
