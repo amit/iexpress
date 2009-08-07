@@ -53,9 +53,9 @@ if ARGV.length != 1
   exit(1)
 end
 name = ARGV[0]
-puts "Using #{name}"
+puts "Using #{name}" if $debug == 1
 base = "http://www.dnaindia.com/columns/#{name}/"
-puts "Base = #{base}"
+puts "Base = #{base}" if $debug == 1
 cachedir = './cache'
 digestfile = cachedir+"/#{name}.digest"
 unless File.directory? cachedir
