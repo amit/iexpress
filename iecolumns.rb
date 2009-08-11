@@ -9,9 +9,9 @@ def h(txt)
   CGI.escapeHTML txt
 end
 
-#require 'iconv'
-#$KCODE = 'u'
-#require 'jcode'
+require 'iconv'
+$KCODE = 'u'
+require 'jcode'
 
 require 'rexml/encoding'
 
@@ -98,9 +98,9 @@ def parse_articles(doc)
     #txt.tr!($CP1252,u($UTF))
 
 
-    d=Dummy.new
-    d.encoding='cp-1252'
-    txt = d.decode_cp1252(u txt)
+    #d=Dummy.new
+    #d.encoding='cp-1252'
+    #txt = d.decode_cp1252(u txt)
 
     parts=b.at("p").children.last.to_s.split
     parts.last.sub!(/\'/,'20')
