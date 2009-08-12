@@ -5,19 +5,8 @@ require 'md5'
 require 'erb'
 require 'cgi'
 
-def h(txt)
-  CGI.escapeHTML txt
-end
-
-require 'iconv'
 $KCODE = 'u'
 require 'jcode'
-
-require 'rexml/encoding'
-
-class Dummy 
-    include REXML::Encoding
-end
 
 class UString < String
    # Show u-prefix as in Python
@@ -37,11 +26,7 @@ class UString < String
  end 
 
 
-$debug = ENV['DEBUG'] || 0
-$make_permalink = 1
-
-
-cp1252 = {
+CP_MAP = {
     # from http=>//www.microsoft.com/typography/unicode/1252.htm
     "\x80"=> "U+20AC", # EURO SIGN
     "\x82"=> "U+201A", # SINGLE LOW-9 QUOTATION MARK
@@ -72,14 +57,23 @@ cp1252 = {
     "\x9F"=> "U+0178", # LATIN CAPITAL LETTER Y WITH DIAERESIS
 }
 
-$CP1252 = cp1252.keys.join
-$UTF = cp1252.values.join
+CP1252 = CP_MAP.keys.join
+UTF = CP_MAP.values.join
+
+
+def h(txt)
+  CGI.escapeHTML txt
+end
+
+$debug = ENV['DEBUG'] || 0
+$make_permalink = 1
+
 
 def parse_articles(doc)
   box=doc.at "#box_left"
   all=box/"div.listing_content"
   # Dumb hack
-  snap=0
+  snap=59
   articles = []
   all.each { |b|
     c=b.at("h5")
@@ -88,24 +82,22 @@ def parse_articles(doc)
       href = href+"0"
     end
     hlt=c.at("a").html
+    hlt=hlt.tr(CP1252,u(UTF))
     txt=b.children.last.to_s
     #txt = Iconv.iconv("UTF-8", "CP1252", txt+' ')
     #txt = Iconv.iconv("UTF-8//IGNORE", "WINDOWS-1252", txt+' ')
     #txt = Iconv.iconv("UTF-8//IGNORE", "UTF-8", txt+' ')
     #ic=Iconv.new('UTF-8//IGNORE', 'WINDOWS-1252')
     #txt = ic.iconv(txt+' ')[0..-2]
+    txt=txt.tr(CP1252,u(UTF))
     
-    #txt.tr!($CP1252,u($UTF))
-
-
-    #d=Dummy.new
-    #d.encoding='cp-1252'
-    #txt = d.decode_cp1252(u txt)
-
     parts=b.at("p").children.last.to_s.split
     parts.last.sub!(/\'/,'20')
-    updated=Date.parse(parts.join(' ')).strftime("%Y-%m-%dT06:00:#{sprintf("%02d",snap)}Z")
-    #snap=snap-1
+    updated=Date.parse(parts.join(' ')).strftime("%Y-%m-%dT00:01:#{sprintf("%02d",snap)}+05:30")
+    snap=snap-1
+    if snap==0
+      snap = 60
+    end
     articles << {:title=>h(hlt), :body=>txt, :updated=>updated, :permalink=>href}
   }
   return articles
@@ -167,7 +159,7 @@ feed_id = "http://www.iexpress.com/columnist/#{name}"
 feed_title = "IE Columnist: #{name.capitalize}"
 feed_updated = rssdata[0][:updated]
 feed_link = "http://chakradeo.net/feeds/#{name}.atom"
-feed_author = "Amit"
+feed_author = "Amit Chakradeo"
 feed_entries = rssdata
 
 hdl.puts(temp.result(binding()))
