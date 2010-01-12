@@ -4,9 +4,9 @@
   <title><%= feed_title %></title>
   <updated><%= feed_updated %></updated>
   <link href="<%= feed_link %>" rel="self"/>
-
   <author>
     <name><%= feed_author %></name>
+    <uri>http://amit.chakradeo.net/</uri>
   </author>
 
 <% for entry in feed_entries %>
