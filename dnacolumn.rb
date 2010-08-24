@@ -5,6 +5,7 @@ require 'md5'
 require 'erb'
 require 'cgi'
 require 'cp_convert'
+require 'date'
 
 include CP1252
 
