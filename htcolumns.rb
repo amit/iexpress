@@ -18,24 +18,20 @@ $make_permalink = 1
 
 
 def parse_articles(doc)
-  box=doc.at "#box_left"
-  all=box/"div.listing_content"
+  all=doc/"div.nikic"
   # Dumb hack
   snap=59
   articles = []
   all.each { |b|
-    c=b.at("h5")
-    href=h(c.at("a")['href'])
-    if $make_permalink == 1 and /.*news.*\/\d+\//.match href
-      href = href+"0"
-    end
-    hlt=c.at("a").html
+    href=h(b.at("a")['href'])
+    hlt=b.at("a").html
     hlt=kill_gremlins(hlt)
-    txt=b.children.last.to_s
+    puts "found: #{hlt}" if $debug == 1
+    txt=b.at(".nikicker").inner_text
     txt=kill_gremlins(txt)
     
-    parts=b.at("p").children.last.to_s.split
-    parts.last.sub!(/\'/,'20')
+    parts=b.parent.parent.at("div.Date").at("span").inner_text.split
+    #parts.last.sub!(/\'/,'20')
     updated=Date.parse(parts.join(' ')).strftime("%Y-%m-%dT00:01:#{sprintf("%02d",snap)}+05:30")
     snap=snap-1
     if snap==0
@@ -54,7 +50,7 @@ def main
   end
   name = ARGV[0]
   puts "Using #{name}" if $debug == 1
-  base = "http://www.indianexpress.com/columnist/#{name}/"
+  base = "http://www.hindustantimes.com/Search/Search.aspx?op=Story&q=#{CGI.escape name}"
   puts "Base = #{base}" if $debug == 1
   cachedir = './cache'
   digestfile = cachedir+"/#{name}.digest"
@@ -98,10 +94,11 @@ end
 
 def generate_atom(rssdata,hdl, name)
   temp = ERB.new(File.open('atom.rxml').read)
-  feed_id = "http://www.iexpress.com/columnist/#{name}"
-  feed_title = "IE Columnist: #{name.capitalize}"
+  #feed_id = "http://www.iexpress.com/columnist/#{CGI.escape name}"
+  feed_id = "http://www.hindustantimes.com/Search/Search.aspx?op=Story&amp;q=#{CGI.escape name}"
+  feed_title = "HT Columnist: #{name.capitalize}"
   feed_updated = rssdata[0][:updated]
-  feed_link = "http://chakradeo.net/feeds/#{name}.atom"
+  feed_link = "http://chakradeo.net/feeds/#{ERB::Util.u name}.atom"
   feed_author = name
   feed_entries = rssdata
   
