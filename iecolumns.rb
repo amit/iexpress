@@ -19,35 +19,36 @@ $make_permalink = 1
 
 def parse_articles(doc)
   box=doc.at "#box_left"
-  all=box/"div.listing_content"
-  # Dumb hack
-  snap=59
-  articles = []
-  all.each { |b|
-    c=b.at("h5")
-    href=h(c.at("a")['href'])
-    if $make_permalink == 1 and /.*news.*\/\d+\//.match href
-      href = href+"0"
-    end
-    hlt=c.at("a").html
-    hlt=kill_gremlins(hlt)
-    txt=b.children.last.to_s
-    txt=kill_gremlins(txt)
-    
-    parts=b.at("p").children.last.to_s.split
-    parts.last.sub!(/\'/,'20')
-    updated=Date.parse(parts.join(' ')).strftime("%Y-%m-%dT00:01:#{sprintf("%02d",snap)}+05:30")
-    snap=snap-1
-    if snap==0
-      snap = 60
-    end
-    articles << {:title=>h(hlt), :body=>txt, :updated=>updated, :permalink=>href}
-  }
-  return articles
+  if box
+    all=box/"div.listing_content"
+    # Dumb hack
+    snap=59
+    articles = []
+    all.each { |b|
+      c=b.at("h5")
+      href=h(c.at("a")['href'])
+      if $make_permalink == 1 and /.*news.*\/\d+\//.match href
+        href = href+"0"
+      end
+      hlt=c.at("a").html
+      hlt=kill_gremlins(hlt)
+      txt=b.children.last.to_s
+      txt=kill_gremlins(txt)
+      
+      parts=b.at("p").children.last.to_s.split
+      parts.last.sub!(/\'/,'20')
+      updated=Date.parse(parts.join(' ')).strftime("%Y-%m-%dT00:01:#{sprintf("%02d",snap)}+05:30")
+      snap=snap-1
+      if snap==0
+        snap = 60
+      end
+      articles << {:title=>h(hlt), :body=>txt, :updated=>updated, :permalink=>href}
+    }
+    return articles
+  end
 end
 
 def main
-
   if ARGV.length != 1
     puts "Usage: #{$0} columnist"
     exit(1)
@@ -67,9 +68,21 @@ def main
   else
     cached_digest = 0
   end
-  uagent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.1.249.1064 Safari/532.5"
-  data = URI(base).read("User-Agent" => uagent,"Referer" => 'http://www.iexpress.com/')
-  #data = File.read('index.html')
+  uagent="Mozilla/5.0 (Windows NT 6.1; rv:6.0.1) Gecko/20100101 Firefox/6.0.1"
+  counter=0
+  begin
+    data = URI(base).read("User-Agent" => uagent,"Referer" => 'http://www.iexpress.com/')
+  rescue Exception=>e
+    puts "Encountered error: #{e}, retry: #{counter}"
+    counter += 1
+    if counter < 5
+      sleep 1
+      retry
+    else
+      #throw "Exception - Repeated EOFError!"
+      exit
+    end
+  end
   dgst = MD5.new(data).hexdigest
   STDERR.puts "Digest = #{dgst}" if $debug == 1
   
@@ -91,9 +104,10 @@ def main
       }
   end
   
-  o=File.open("/home/spacefra/www/feeds/#{name}.atom",'w')
-  generate_atom rssdata,o,name
-  
+  if rssdata
+    o=File.open("/home/spacefra/www/feeds/#{name}.atom",'w')
+    generate_atom rssdata,o,name
+  end
 end
 
 def generate_atom(rssdata,hdl, name)
