@@ -76,7 +76,7 @@ def main
     puts "Encountered error: #{e}, retry: #{counter}"
     counter += 1
     if counter < 5
-      sleep 1
+      sleep (1+rand(4))
       retry
     else
       #throw "Exception - Repeated EOFError!"
@@ -86,13 +86,15 @@ def main
   dgst = MD5.new(data).hexdigest
   STDERR.puts "Digest = #{dgst}" if $debug == 1
   
-  if(false) # turn this on later
-  if(dgst == cached_digest)
-    STDERR.puts "Nothing changed, not processing!" if $debug == 1
-    exit(0)
-  else
-    c = File.open(digestfile, "w").write(dgst)
-  end
+  if(true) # turn this on later
+    if(dgst == cached_digest)
+      STDERR.puts "Nothing changed, not processing!" if $debug == 1
+      exit(0)
+    else
+      File.open(digestfile, "w") do |f|
+        f.write(dgst)
+      end
+    end
   end
   doc = Hpricot(data)
   
