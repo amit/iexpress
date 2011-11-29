@@ -55,7 +55,7 @@ if File.file? digestfile
 else
   cached_digest = 0
 end
-data = URI(base).read("User-Agent" => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.9) Gecko/20071025 Firefox/2.0.0.9',"Referer" => 'http://www.dnsindia.com/')
+data = URI(base).read("User-Agent" => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.9) Gecko/20071025 Firefox/2.0.0.9',"Referer" => 'http://www.dnaindia.com/')
 #data = File.read('index.html')
 dgst = MD5.new(data).hexdigest
 STDERR.puts "Digest = #{dgst}" if $debug == 1
