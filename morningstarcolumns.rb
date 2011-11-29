@@ -92,7 +92,8 @@ def main
   
   o=File.open("/home/spacefra/www/feeds/#{name}.atom",'w')
   generate_atom rssdata,o,name
-  
+  o.close
+  system "/home/spacefra/vir/bin/python pubsubhubbub_publish.py http://chakradeo.net/feeds/#{ERB::Util.u name}.atom"
 end
 
 def generate_atom(rssdata,hdl, name)
