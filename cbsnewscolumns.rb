@@ -13,7 +13,7 @@ def h(txt)
   CGI.escapeHTML txt
 end
 
-$debug = ENV['DEBUG'] || 1
+$debug = ENV['DEBUG'] || 0
 
 def get_rows(doc)
   all = doc/"ul.newsListing li"
@@ -101,10 +101,10 @@ def main
       }
   end
   
-  o=File.open("/home/spacefra/www/feeds/#{name}.atom",'w')
+  o=File.open("/home/amitc/chakradeo.net/feeds/#{name}.atom",'w')
   generate_atom rssdata,o,name, base
   o.close
-  system "/home/spacefra/vir/bin/python pubsubhubbub_publish.py http://chakradeo.net/feeds/#{ERB::Util.u name}.atom"
+  #system "/home/spacefra/vir/bin/python pubsubhubbub_publish.py http://chakradeo.net/feeds/#{ERB::Util.u name}.atom"
 end
 
 def generate_atom(rssdata,hdl, name, base)

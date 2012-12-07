@@ -13,7 +13,7 @@ def h(txt)
   CGI.escapeHTML txt
 end
 
-$debug = ENV['DEBUG'] || 1
+$debug = ENV['DEBUG'] || 0
 $make_permalink = 1
 
 

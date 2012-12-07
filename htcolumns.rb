@@ -63,7 +63,8 @@ def main
   else
     cached_digest = 0
   end
-  uagent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.1.249.1064 Safari/532.5"
+  #uagent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/532.5 (KHTML, like Gecko) Chrome/4.1.249.1064 Safari/532.5"
+  uagent="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.13 (KHTML, like Gecko) Chrome/24.0.1290.1 Safari/537.13"
   data = URI(base).read("User-Agent" => uagent,"Referer" => 'http://www.iexpress.com/')
   #data = File.read('index.html')
   dgst = MD5.new(data).hexdigest
@@ -87,7 +88,7 @@ def main
       }
   end
   
-  o=File.open("/home/spacefra/www/feeds/#{name}.atom",'w')
+  o=File.open("/home/amitc/chakradeo.net/feeds/#{name}.atom",'w')
   generate_atom rssdata,o,name
   
 end

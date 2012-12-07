@@ -107,10 +107,10 @@ def main
   end
   
   if rssdata
-    o=File.open("/home/spacefra/www/feeds/#{name}.atom",'w')
+    o=File.open("/home/amitc/chakradeo.net/feeds/#{name}.atom",'w')
     generate_atom rssdata,o,name
     o.close
-    system "/home/spacefra/vir/bin/python pubsubhubbub_publish.py http://chakradeo.net/feeds/#{ERB::Util.u name}.atom"
+    system "python pubsubhubbub_publish.py http://chakradeo.net/feeds/#{ERB::Util.u name}.atom"
   end
 end
 

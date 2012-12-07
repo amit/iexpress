@@ -80,6 +80,6 @@ if __name__ == '__main__':
   import sys
   hub='http://pubsubhubbub.appspot.com/'
   feeds = sys.argv[1:]
-  print("Publishing to hub %s the URLs %s" %(hub, feeds))
+  #print("Publishing to hub %s the URLs %s" %(hub, feeds))
   publish(hub, feeds)
 
