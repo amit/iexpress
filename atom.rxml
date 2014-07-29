@@ -8,7 +8,6 @@
     <name><%= feed_author %></name>
     <uri>http://amit.chakradeo.net/</uri>
   </author>
-  <link rel="hub" href="http://pubsubhubbub.appspot.com/" />
 
 <% for entry in feed_entries %>
 <entry>

@@ -13,7 +13,7 @@ def h(txt)
   CGI.escapeHTML txt
 end
 
-$debug = ENV['DEBUG'] || 0
+$debug = ENV['DEBUG'] || 1
 
 def get_rows(doc)
   all = doc/"ul.newsListing li"
@@ -64,7 +64,17 @@ def main
   end
   name = ARGV[0]
   puts "Using #{name}" if $debug == 1
-  base = "http://www.cbsnews.com/1770-5_162-0.html?query=#{CGI.escape name}&tag=srch&searchtype=cbsSearch&tag=mwuser&sort=updateDate%20desc"
+  base = case name
+    when 'roth'   ; "http://www.cbsnews.com/2741-505123_162-1340.html"
+    when 'swedroe'; "http://www.cbsnews.com/2741-505123_162-1339.html"
+    else ''
+  end
+  if base == ''
+    puts "Invalid argument #{name}"
+    exit(1)
+  end
+
+  #base = "http://www.cbsnews.com/1770-5_162-0.html?query=#{CGI.escape name}&tag=srch&searchtype=cbsSearch&tag=mwuser&sort=updateDate%20desc"
   puts "Base = #{base}" if $debug == 1
   cachedir = './cache'
   digestfile = cachedir+"/#{name}.digest"

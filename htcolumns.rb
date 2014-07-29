@@ -24,13 +24,13 @@ def parse_articles(doc)
   articles = []
   all.each { |b|
     href=h(b.at("a")['href'])
-    hlt=b.at("a").html
+    hlt=b.at("a").inner_html
     hlt=kill_gremlins(hlt)
     puts "found: #{hlt}" if $debug == 1
     txt=b.at(".nikicker").inner_text
     txt=kill_gremlins(txt)
     
-    parts=b.parent.parent.at("div.Date").at("span").inner_text.split
+    parts=b.at("div.Date").inner_text.split
     #parts.last.sub!(/\'/,'20')
     updated=Date.parse(parts.join(' ')).strftime("%Y-%m-%dT00:01:#{sprintf("%02d",snap)}+05:30")
     snap=snap-1
