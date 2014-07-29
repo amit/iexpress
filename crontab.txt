@@ -1,0 +1,15 @@
+
+# Generate various feeds
+50 0 * * * (cd /home/amitc/projects/iexpress; GEM_HOME=/home/amitc/.gem ruby iecolumns.rb shekhar-gupta)
+10 1 * * * (cd /home/amitc/projects/iexpress; GEM_HOME=/home/amitc/.gem ruby iecolumns.rb pratap-bhanu-mehta)
+30 1 * * * (cd /home/amitc/projects/iexpress; GEM_HOME=/home/amitc/.gem ruby iecolumns.rb tavleen-singh)
+50 1 * * * (cd /home/amitc/projects/iexpress; GEM_HOME=/home/amitc/.gem ruby iecolumns.rb ila-patnaik)
+10 2 * * * (cd /home/amitc/projects/iexpress; GEM_HOME=/home/amitc/.gem ruby iecolumns.rb arun-shourie)
+30 2 * * * (cd /home/amitc/projects/iexpress; GEM_HOME=/home/amitc/.gem ruby iecolumns.rb sudheendra-kulkarni)
+# 30 2 * * * (cd /home/amitc/projects/iexpress; GEM_HOME=/home/amitc/.gem ruby iecolumns.rb mihirssharma)
+50 2 * * * (cd /home/amitc/projects/iexpress; GEM_HOME=/home/amitc/.gem ruby iecolumns.rb c-raja-mohan)
+10 3 * * * (cd /home/amitc/projects/iexpress; GEM_HOME=/home/amitc/.gem ruby iecolumns.rb harsha-bhogle)
+30 3 * * * (cd /home/amitc/projects/iexpress; GEM_HOME=/home/amitc/.gem ruby iecolumns.rb shailaja-bajpai)
+# 10 4 * * * (cd /home/amitc/projects/iexpress; GEM_HOME=/home/amitc/.gem ruby htcolumns.rb "karan thapar")
+
+#25 4 * * * (cd /home/amitc/planet/venus; python planet.py ../marathi.ini)
