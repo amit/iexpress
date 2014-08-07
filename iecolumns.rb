@@ -18,7 +18,9 @@ $make_permalink = 1
 
 
 def parse_articles(doc)
-    all = doc/"div.col-stories"
+    # all = doc/"div.col-stories"
+    all = doc/"div.edi-stories"
+
     # Dumb hack
     snap=59
     articles = []
